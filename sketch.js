@@ -167,7 +167,7 @@ function keyPressed() {
   // Toggle Features
   if (key.toLowerCase() === "g") {
     moonGravity = !moonGravity;
-    world.gravity.y = moonGravity ? MOON_GRAVITY_VALUE : GRAVITY;
+    world.gravity.y = moonGravity ? 2 : GRAVITY;
   }
 
   if (key.toLowerCase() === "b") {
@@ -242,32 +242,21 @@ function draw() {
 
   // --- KEEP IN VIEW ---
   player.pos.x = constrain(player.pos.x, FRAME_W / 2, VIEWW - FRAME_W / 2);
+  player.y = constrain(player.y, FRAME_H / 2, VIEWH - FRAME_H / 2);
+  player.x = constrain(player.x, FRAME_W / 2, VIEWW - FRAME_W / 2);
 
   if (debug) {
     camera.off();
-
-    fill(0);
-    noStroke();
+    fill(0, 180);
     rect(5, 5, 140, 75, 4);
-
-    // Draw Text
     fill(255);
     textSize(8);
     textAlign(LEFT, TOP);
     text("DEVELOPER DEBUG MENU", 10, 10);
-    text("-----------------------", 10, 18);
-
-    // Status indicators
-    fill(moonGravity ? "#228B22" : "#C41E3A");
     text("Moon Gravity (G): " + (moonGravity ? "ON" : "OFF"), 10, 30);
-
-    fill(speedBoost ? "#228B22" : "#C41E3A");
     text("Speed Boost (B): " + (speedBoost ? "ON" : "OFF"), 10, 42);
-
-    fill(255);
-    text("Player X: " + floor(player.x), 10, 54);
+    text("Y-Pos: " + floor(player.y), 10, 54);
     text("FPS: " + floor(frameRate()), 10, 66);
-
     camera.on();
   }
 }
