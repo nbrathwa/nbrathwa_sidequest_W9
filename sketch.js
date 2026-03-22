@@ -232,10 +232,10 @@ function draw() {
 
     player.vel.x = 0;
     if (kb.pressing("left")) {
-      player.vel.x = -1.5;
+      player.vel.x = -moveSpeed;
       player.mirror.x = true;
     } else if (kb.pressing("right")) {
-      player.vel.x = 1.5;
+      player.vel.x = moveSpeed;
       player.mirror.x = false;
     }
   }
