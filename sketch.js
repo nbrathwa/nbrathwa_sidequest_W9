@@ -20,6 +20,10 @@ let playerImg, bgImg;
 let jumpSfx, musicSfx;
 let musicStarted = false;
 
+let speedBoost = false;
+let moonGravity = false;
+let debug = false;
+
 let playerAnis = {
   idle: { row: 0, frames: 4, frameDelay: 10 },
   run: { row: 1, frames: 4, frameDelay: 3 },
@@ -64,6 +68,8 @@ const MAP_START_Y = VIEWH - TILE_H * 4;
 
 // gravity
 const GRAVITY = 10;
+
+const MOON_GRAVITY_VALUE = 2;
 
 function preload() {
   // --- IMAGES ---
@@ -154,6 +160,19 @@ function startMusicIfNeeded() {
 
 function keyPressed() {
   startMusicIfNeeded();
+  if (key === "\\") {
+    debug = !debug;
+  }
+
+  // Toggle Features
+  if (key.toLowerCase() === "g") {
+    moonGravity = !moonGravity;
+    world.gravity.y = moonGravity ? MOON_GRAVITY_VALUE : GRAVITY;
+  }
+
+  if (key.toLowerCase() === "b") {
+    speedBoost;
+  }
 }
 
 function mousePressed() {
@@ -188,7 +207,7 @@ function draw() {
 
   // -- JUMP --
   if (grounded && kb.presses("up")) {
-    player.vel.y = -4;
+    player.vel.y = moonGravity ? -5 : -4;
     if (jumpSfx) jumpSfx.play();
   }
 
@@ -209,6 +228,8 @@ function draw() {
 
   // --- MOVEMENT ---
   if (!attacking) {
+    let moveSpeed = speedBoost ? 3.5 : 1.5;
+
     player.vel.x = 0;
     if (kb.pressing("left")) {
       player.vel.x = -1.5;
@@ -221,4 +242,32 @@ function draw() {
 
   // --- KEEP IN VIEW ---
   player.pos.x = constrain(player.pos.x, FRAME_W / 2, VIEWW - FRAME_W / 2);
+
+  if (debug) {
+    camera.off();
+
+    fill(0);
+    noStroke();
+    rect(5, 5, 140, 75, 4);
+
+    // Draw Text
+    fill(255);
+    textSize(8);
+    textAlign(LEFT, TOP);
+    text("DEVELOPER DEBUG MENU", 10, 10);
+    text("-----------------------", 10, 18);
+
+    // Status indicators
+    fill(moonGravity ? "#228B22" : "#C41E3A");
+    text("Moon Gravity (G): " + (moonGravity ? "ON" : "OFF"), 10, 30);
+
+    fill(speedBoost ? "#228B22" : "#C41E3A");
+    text("Speed Boost (B): " + (speedBoost ? "ON" : "OFF"), 10, 42);
+
+    fill(255);
+    text("Player X: " + floor(player.x), 10, 54);
+    text("FPS: " + floor(frameRate()), 10, 66);
+
+    camera.on();
+  }
 }
