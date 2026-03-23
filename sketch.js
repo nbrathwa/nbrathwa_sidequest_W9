@@ -167,11 +167,11 @@ function keyPressed() {
   // Toggle Features
   if (key.toLowerCase() === "g") {
     moonGravity = !moonGravity;
-    world.gravity.y = moonGravity ? 2 : GRAVITY;
+    world.gravity.y = moonGravity ? MOON_GRAVITY_VALUE : GRAVITY;
   }
 
   if (key.toLowerCase() === "b") {
-    speedBoost;
+    speedBoost = !speedBoost;
   }
 }
 
